@@ -12,6 +12,8 @@ import java.util.logging.Logger;
  */
 public class Conexion extends BD {
 
+    public static String LOCAL_URL = "jdbc:mysql://localhost/";
+
     private static Conexion Nodo;
 
     private static final Logger LOG = Logger.getLogger(Conexion.class.getName());
@@ -68,5 +70,5 @@ public class Conexion extends BD {
         st = getCn().createStatement();
         st.execute(sent.INSERT(Tabla, Values, Values));
     }
-    
+
 }
