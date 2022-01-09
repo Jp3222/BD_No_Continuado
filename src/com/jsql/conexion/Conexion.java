@@ -33,8 +33,19 @@ public class Conexion extends BD {
 
     protected Conexion(String user, String pass, String url) {
         super(user, pass, url);
-        sent = new SQL() {
-        };
+        sent = new SQL();
+    }
+
+    public String Valores(String[] campos, String[] datos) {
+        return SQL.getCampos_Datos(campos, datos);
+    }
+
+    public String getColumnas(String... columnas) {
+        return SQL.getColumas(columnas);
+    }
+
+    public String getDatos(String... Datos) {
+        return SQL.getDatos(Datos);
     }
 
     public ResultSet select(String Tabla, String Campo, String Where) throws SQLException {
