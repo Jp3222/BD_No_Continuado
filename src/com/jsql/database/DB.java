@@ -3,8 +3,6 @@ package com.jsql.database;
 import java.util.ArrayList;
 import com.jsql.conexion.Conexion;
 import java.sql.SQLException;
-import java.util.logging.Level;
-import java.util.logging.Logger;
 
 /**
  *
@@ -16,14 +14,18 @@ public class DB extends Conexion {
 
     public DB(String user, String pass, String url) {
         super(user, pass, url);
-        conectar();
+        Conectar();
     }
 
-    public TB getTabla(String Table) throws NullPointerException{
+    public void Conectar() {
+        this.conectar();
+    }
+
+    public TB getTabla(String Table) throws NullPointerException {
         try {
-            String columnas[] = null;
+            String col[] = null;
             select(Table, Table);
-            return TB.getInstancia(Table, columnas);
+            return TB.getInstancia(Table, col);
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
         }

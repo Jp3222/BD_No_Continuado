@@ -1,6 +1,6 @@
 package com.jsql.conexion;
 
-import com.jsql.sentencias.Sentencias;
+import com.jsql.sentencias.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
@@ -12,7 +12,7 @@ import java.util.logging.Logger;
  */
 public class Conexion extends BD {
 
-    public static String LOCAL_URL = "jdbc:mysql://localhost/";
+    public static String LOCAL_URL = "jdbc:mysql://localhost:3306/";
 
     private static Conexion Nodo;
 
@@ -29,11 +29,12 @@ public class Conexion extends BD {
         return Nodo;
     }
     private Statement st;
-    private final Sentencias sent;
+    private final SQL sent;
 
     protected Conexion(String user, String pass, String url) {
         super(user, pass, url);
-        sent = new Sentencias();
+        sent = new SQL() {
+        };
     }
 
     public ResultSet select(String Tabla, String Campo, String Where) throws SQLException {
