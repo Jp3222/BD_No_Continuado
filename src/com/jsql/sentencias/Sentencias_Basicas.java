@@ -4,7 +4,7 @@ package com.jsql.sentencias;
  *
  * @author jp
  */
-interface Sentencias {
+public interface Sentencias_Basicas{
 
     public String INSERT(String Tabla, String Valores);
 
@@ -15,7 +15,5 @@ interface Sentencias {
     public String UPDATE(String Tabla, String Campo, String Remplazo, String Where);
 
     public String DELETE(String Tabla, String Where);
-
-    public String Sentencia(String sentencia);
 
 }

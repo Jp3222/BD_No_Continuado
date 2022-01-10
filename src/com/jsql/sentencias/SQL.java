@@ -2,7 +2,7 @@ package com.jsql.sentencias;
 
 import java.util.logging.Logger;
 
-public class SQL implements Querys, Sentencias {
+public class SQL implements Commandos_Basicos {
 
     private static final Logger LOG = Logger.getLogger(SQL.class.getName());
 
@@ -61,11 +61,6 @@ public class SQL implements Querys, Sentencias {
     }
 
     @Override
-    public String Sentencia(String sentencia) {
-        return sentencia;
-    }
-
-    @Override
     public String SELECT(String Tabla) {
         return "select * from " + Tabla;
     }
@@ -83,6 +78,11 @@ public class SQL implements Querys, Sentencias {
     @Override
     public String QUERY(String query) {
         return query;
+    }
+
+    @Override
+    public String SENTENCIA(String sentencia) {
+        return sentencia;
     }
 
 }

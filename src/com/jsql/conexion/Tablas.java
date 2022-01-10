@@ -3,6 +3,7 @@ package com.jsql.conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Arrays;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -28,7 +29,7 @@ public class Tablas {
         String[] elems = new String[columnas.length];
         int i;
         while (rs.next()) {
-            
+
             i = 0;
             for (String columna : columnas) {
                 elems[i] = rs.getString(columna);
@@ -52,8 +53,10 @@ public class Tablas {
         ArrayList<String[]> lista = Tabla_String(rs, col);
         String matriz[][] = new String[lista.size()][col.length];
         for (int i = 0; i < lista.size(); i++) {
-            matriz[i] = lista.remove(i);
+            matriz[i] = lista.get(i);
+            //System.out.println(i + ": " + Arrays.toString(matriz[i]));
         }
+        lista = null;
         return matriz;
     }
 

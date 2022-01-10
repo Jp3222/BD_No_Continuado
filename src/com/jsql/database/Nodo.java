@@ -1,27 +1,20 @@
 package com.jsql.database;
 
-import com.jsql.sentencias.sentencia;
-import javax.lang.model.SourceVersion;
-
 /**
  *
  * @author HP
  * @param <K>
  * @param <T>
  */
-public class Nodo<K extends Comparable<K>, T extends Comparable<T>> extends sentencia {
+public class Nodo<K extends Comparable<K>, T extends Comparable<T>> {
 
     private K key;
     private T[] items;
-    private Nodo izq,der;
+    private Nodo izq, der;
+
     public Nodo(K key, T[] items) {
         this.key = key;
         this.items = items;
-    }
-
-    @SuppressWarnings("unchecked")
-    public String getSentenciasSQL() {
-        return sentencia(items);
     }
 
     public K getKey() {
@@ -55,5 +48,5 @@ public class Nodo<K extends Comparable<K>, T extends Comparable<T>> extends sent
     public void setDer(Nodo der) {
         this.der = der;
     }
-    
+
 }

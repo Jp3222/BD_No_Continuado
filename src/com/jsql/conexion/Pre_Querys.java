@@ -6,7 +6,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 
-public class Pre_Querys {
+class Pre_Querys {
 
     ArrayList<PreparedStatement> lista;
     Connection cn;

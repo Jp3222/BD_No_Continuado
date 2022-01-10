@@ -3,8 +3,6 @@ package Prueba;
 import com.jsql.conexion.Conexion;
 import com.jsql.conexion.Tablas;
 import java.sql.SQLException;
-import java.sql.ResultSet;
-import java.util.ArrayList;
 import java.util.Arrays;
 
 public class Main {
@@ -24,6 +22,7 @@ public static final String Productos[] = {
         cn.add_Pre_Query(cn.sentencias().SELECT("productos", "*", "precio > ?"));
         cn.setString(0, 1, "20");
         Tablas t = new Tablas();
+        //ArrayList<String[]> array = t.Tabla_String(cn.Execute_Pre_Query(0), Productos);
         String[][] array = t.Tabla(cn.Execute_Pre_Query(0), Productos);
         for (String[] strings : array) {
             System.out.println(Arrays.toString(strings));
