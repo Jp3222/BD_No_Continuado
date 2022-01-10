@@ -4,6 +4,7 @@ import com.jsql.sentencias.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -12,7 +13,11 @@ import java.util.logging.Logger;
  */
 public class Conexion extends BD {
 
-    public static String LOCAL_URL = "jdbc:mysql://localhost:3306/";
+    public static String LOCAL_URL = "jdbc:mysql://localhost/";
+
+    public static String getLocal_Url(String port, String DB) {
+        return "jdbc:mysql://localhost:" + port + "/" + DB;
+    }
 
     private static Conexion Nodo;
 
@@ -29,14 +34,47 @@ public class Conexion extends BD {
         return Nodo;
     }
     private Statement st;
-    private final SQL sent;
+    private SQL sent;
+    private Pre_Querys pq;
 
     protected Conexion(String user, String pass, String url) {
         super(user, pass, url);
         sent = new SQL();
+
     }
 
-    public String Valores(String[] campos, String[] datos) {
+    @Override
+    public void conectar() {
+        super.conectar();
+        Pre_Querys();
+    }
+
+    private void Pre_Querys() {
+        pq = new Pre_Querys(getCn());
+    }
+
+    public boolean add_Pre_Query(String Query) throws SQLException {
+        return pq.add_Pre_Query(Query);
+    }
+
+    public void setString(int query, int p, String param) throws SQLException {
+        pq.setString(query, p, param);
+    }
+
+    public ResultSet executeQuery(int query) throws SQLException {
+        return pq.executeQuery(query);
+    }
+
+    public ResultSet Execute_Pre_Query(int query) {
+        try {
+            return pq.executeQuery(query);
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        throw new NullPointerException("Query no listado");
+    }
+
+    public String getCampos_Columas(String[] campos, String[] datos) {
         return SQL.getCampos_Datos(campos, datos);
     }
 
@@ -82,5 +120,9 @@ public class Conexion extends BD {
         st = getCn().createStatement();
         st.execute(sent.INSERT(Tabla, Values, Values));
     }
-
+    
+    public SQL sentencias(){
+        return sent;
+    }
+    
 }
