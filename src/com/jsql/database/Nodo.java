@@ -8,21 +8,21 @@ package com.jsql.database;
  */
 public class Nodo<K extends Comparable<K>, T extends Comparable<T>> {
 
-    private K key;
+    private K ID;
     private T[] items;
     private Nodo izq, der;
 
     public Nodo(K key, T[] items) {
-        this.key = key;
+        this.ID = key;
         this.items = items;
     }
 
-    public K getKey() {
-        return key;
+    public K getID() {
+        return ID;
     }
 
-    public void setKey(K key) {
-        this.key = key;
+    public void setID(K ID) {
+        this.ID = ID;
     }
 
     public T[] getItems() {

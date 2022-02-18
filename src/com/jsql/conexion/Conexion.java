@@ -1,10 +1,10 @@
 package com.jsql.conexion;
 
+import com.jsql.sentencias.Func;
 import com.jsql.sentencias.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Level;
 import java.util.logging.Logger;
 
 /**
@@ -13,7 +13,11 @@ import java.util.logging.Logger;
  */
 public class Conexion extends BD {
 
-    public static String LOCAL_URL = "jdbc:mysql://localhost/";
+    private static final String LOCAL_URL = "jdbc:mysql://localhost/";
+
+    public static String getLOCAL_URL(String db) {
+        return LOCAL_URL + db;
+    }
 
     public static String getLocal_Url(String port, String DB) {
         return "jdbc:mysql://localhost:" + port + "/" + DB;
@@ -23,6 +27,14 @@ public class Conexion extends BD {
 
     private static final Logger LOG = Logger.getLogger(Conexion.class.getName());
 
+    /**
+     * getNodo - Metodo encargado de instanciar la clase 
+     *
+     * @param user - usuario de la base de datoa.
+     * @param pass - contraseña de la base de datos.
+     * @param url - direccion de la base de datos.
+     * @return Nodo retorna una instancia de tipo conexion.
+     */
     public static Conexion getNodo(String user, String pass, String url) {
         if (Nodo == null) {
             Nodo = new Conexion(user, pass, url);
@@ -34,7 +46,7 @@ public class Conexion extends BD {
         return Nodo;
     }
     private Statement st;
-    private SQL sent;
+    private final SQL sent;
     private Pre_Querys pq;
 
     protected Conexion(String user, String pass, String url) {
@@ -75,15 +87,15 @@ public class Conexion extends BD {
     }
 
     public String getCampos_Columas(String[] campos, String[] datos) {
-        return SQL.getCampos_Datos(campos, datos);
+        return Func.getCampos_Datos(campos, datos);
     }
 
     public String getColumnas(String... columnas) {
-        return SQL.getColumas(columnas);
+        return Func.getColumas(columnas);
     }
 
     public String getDatos(String... Datos) {
-        return SQL.getDatos(Datos);
+        return Func.getDatos(Datos);
     }
 
     public ResultSet select(String Tabla, String Campo, String Where) throws SQLException {
@@ -120,9 +132,9 @@ public class Conexion extends BD {
         st = getCn().createStatement();
         st.execute(sent.INSERT(Tabla, Values, Values));
     }
-    
-    public SQL sentencias(){
+
+    public SQL getSentencias() {
         return sent;
     }
-    
+
 }

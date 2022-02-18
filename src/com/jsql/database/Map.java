@@ -35,7 +35,7 @@ public class Map<K extends Comparable<K>, T extends Comparable<T>> {
     }
 
     private boolean add(Nodo<K, T> root, Nodo<K, T> aux) {
-        if (aux.getKey().compareTo(root.getKey()) < 0) {
+        if (aux.getID().compareTo(root.getID()) < 0) {
             if (root.getIzq() == null) {
                 root.setIzq(aux);
                 size++;
@@ -43,7 +43,7 @@ public class Map<K extends Comparable<K>, T extends Comparable<T>> {
             } else {
                 return add(root.getIzq(), aux);
             }
-        } else if (aux.getKey().compareTo(root.getKey()) > 0) {
+        } else if (aux.getID().compareTo(root.getID()) > 0) {
             if (root.getDer() == null) {
                 root.setDer(aux);
                 size++;
@@ -53,6 +53,21 @@ public class Map<K extends Comparable<K>, T extends Comparable<T>> {
             }
         }
         return false;
+    }
+
+    public Nodo<K, T> search(K key) {
+        return search(root, key);
+    }
+
+    private Nodo<K, T> search(Nodo<K, T> root, K key) {
+        if (root.getID().equals(key)) {
+            return root;
+        } else if (key.compareTo(root.getID()) < 0) {
+            return search(root.getIzq(), key);
+        } else if (key.compareTo(root.getID()) > 0) {
+            return search(root.getDer(), key);
+        }
+        return null;
     }
 
     public int getSize() {

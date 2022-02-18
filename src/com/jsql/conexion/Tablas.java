@@ -3,7 +3,6 @@ package com.jsql.conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import javax.swing.table.DefaultTableModel;
 
 /**
@@ -13,23 +12,22 @@ import javax.swing.table.DefaultTableModel;
 public class Tablas {
 
     public ArrayList<String[]> Tabla_String(ResultSet rs, int columnas) throws SQLException {
-        ArrayList<String[]> lista = new ArrayList<>(0);
-        String[] elems = new String[columnas];
+        ArrayList<String[]> lista = new ArrayList<>();
         while (rs.next()) {
+            String[] elems = new String[columnas];
             for (int j = 0; j < columnas; j++) {
                 elems[j] = rs.getString(j);
             }
-            lista.add(elems.clone());
+            lista.add(elems);
         }
         return lista;
     }
 
     public ArrayList<String[]> Tabla_String(ResultSet rs, String[] columnas) throws SQLException {
-        ArrayList<String[]> lista = new ArrayList<>(0);
+        ArrayList<String[]> lista = new ArrayList<>();
         String[] elems = new String[columnas.length];
         int i;
         while (rs.next()) {
-
             i = 0;
             for (String columna : columnas) {
                 elems[i] = rs.getString(columna);
@@ -44,7 +42,7 @@ public class Tablas {
         ArrayList<String[]> lista = Tabla_String(rs, col);
         String matriz[][] = new String[lista.size()][col];
         for (int i = 0; i < lista.size(); i++) {
-            matriz[i] = lista.remove(i);
+            matriz[i] = lista.get(i);
         }
         return matriz;
     }
@@ -56,7 +54,6 @@ public class Tablas {
             matriz[i] = lista.get(i);
             //System.out.println(i + ": " + Arrays.toString(matriz[i]));
         }
-        lista = null;
         return matriz;
     }
 
