@@ -1,59 +1,49 @@
 package com.jsql.sentencias;
 
-import java.util.logging.Logger;
-
-public class SQL implements Commandos_Basicos {
-
-    private static final Logger LOG = Logger.getLogger(SQL.class.getName());
+/**
+ *
+ * @author jp
+ */
+public class SQL extends Sentencias implements Sentencias_Basicas {
 
     @Override
-    public String INSERT(String Tabla, String Campos, String Values) {
-        return "insert into " + Tabla + " (" + Campos + ")" + " Values (" + Values + ")";
+    public String INSERT(String tabla, String datos) {
+        return "insert into " + tabla + "(" + datos + ")";
     }
 
     @Override
-    public String INSERT(String Tabla, String Values) {
-        return "insert into " + Tabla + " Values (" + Values + ")";
+    public String INSERT(String tabla, String campos, String datos) {
+        return "insert into " + tabla + " (" + campos + ") values (" + datos + ")";
     }
 
     @Override
-    public String UPDATE(String Tabla, String data, String where) {
-        return "update " + Tabla + " set " + data + " where " + where;
+    public String UPDATE(String tabla, String campos_datos, String where) {
+        return "update " + tabla + " set " + campos_datos + " where " + where;
     }
 
     @Override
-    public String UPDATE(String Tabla, String campo, String dato, String where) {
-        return "update " + Tabla + " set " + campo + " = " + "'" + dato + "'" + " where " + where;
+    public String UPDATE(String tabla, String campos, String datos, String where) {
+        return "update " + tabla + " set " + campos + " = '" + datos + "' where " + where;
     }
 
     @Override
-    public String DELETE(String Tabla, String where) {
-        return "delete from " + Tabla + " where " + where;
+    public String DELETE(String tablas, String where) {
+        return "delete from " + tablas + " where " + where;
     }
 
     @Override
-    public String SELECT(String Tabla) {
-        return "select * from " + Tabla;
+    public String SELECT(String tabla) {
+        return "select * from " + tabla;
     }
 
     @Override
-    public String SELECT(String Tabla, String Campos) {
-        return "select " + Campos + " from " + Tabla;
+    public String SELECT(String tabla, String campos) {
+        return "select " + campos + " from " + tabla;
     }
 
     @Override
-    public String SELECT(String Tabla, String Campos, String Where) {
-        return "select " + Campos + " from " + Tabla + " Where " + Where;
-    }
-
-    @Override
-    public String QUERY(String query) {
-        return query;
-    }
-
-    @Override
-    public String SENTENCIA(String sentencia) {
-        return sentencia;
+    public String SELECT(String tabla, String campos, String where) {
+        return "select " + campos + " from " + tabla + " where " + where;
     }
 
 }

@@ -11,17 +11,16 @@ public class Func {
         for (String value : values) {
             v += "'" + value + "',";
         }
-        v = v.substring(0, v.length() - 1);
-        return v;
+        return v.substring(0, v.length() - 1);
+
     }
 
     public static String getColumas(String... colums) {
         String v = "";
         for (String value : colums) {
-            v += "" + value + ",";
+            v += value + ",";
         }
-        v = v.substring(0, v.length() - 1);
-        return v;
+        return v.substring(0, v.length() - 1);
     }
 
     public static String getCampos_Datos(String[] campos, String[] datos) {

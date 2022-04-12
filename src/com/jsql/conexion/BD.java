@@ -8,23 +8,21 @@ import java.sql.SQLException;
  * @author Juan Pablo
  * @version 0.1 Esta clase esta dedicada a la conexion de la base de datos
  */
-class BD {
+abstract class BD {
 
     /**
-     * user:
-     * pass:
-     * url:
+     * user: pass: url:
      */
-    private final String user, pass, url;
-    private Connection cn;
-    private boolean Conexion;
+    protected final String user, pass, url;
+    protected Connection cn;
+    protected boolean Conexion;
 
     /**
      * @param user
      * @param pass
      * @param url
      */
-    public BD(String user, String pass, String url) {
+    protected BD(String user, String pass, String url) {
         this.user = user;
         this.pass = pass;
         this.url = url;
@@ -36,10 +34,15 @@ class BD {
         try {
             cn = DriverManager.getConnection(url, user, pass);
             Conexion = true;
+            init();
         } catch (SQLException ex) {
             Conexion = false;
             System.out.println(ex.getMessage());
         }
+    }
+
+    public void init() {
+
     }
 
     /**

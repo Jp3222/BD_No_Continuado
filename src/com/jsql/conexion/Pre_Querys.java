@@ -8,21 +8,21 @@ import java.util.ArrayList;
 
 class Pre_Querys {
 
-    ArrayList<PreparedStatement> lista;
-    Connection cn;
+    private final ArrayList<PreparedStatement> lista;
+    private final Connection cn;
 
     public Pre_Querys(Connection cn) {
         this.lista = new ArrayList<>(0);
         this.cn = cn;
     }
 
-    public boolean add_Pre_Query(String query) throws SQLException {
+    public boolean add_PreQuery(String query) throws SQLException {
         PreparedStatement ps = cn.prepareStatement(query);
         return lista.add(ps);
     }
 
-    public void setString(int query, int p, String param) throws SQLException {
-        lista.get(query).setString(p, param);
+    public void setString(int indexQuery, int indexP, String param) throws SQLException {
+        lista.get(indexP).setString(indexP, param);
     }
 
     public ResultSet executeQuery(int index) throws SQLException {

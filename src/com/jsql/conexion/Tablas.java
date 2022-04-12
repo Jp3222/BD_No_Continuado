@@ -3,7 +3,6 @@ package com.jsql.conexion;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
-import javax.swing.table.DefaultTableModel;
 
 /**
  *
@@ -11,62 +10,79 @@ import javax.swing.table.DefaultTableModel;
  */
 public class Tablas {
 
-    public ArrayList<String[]> Tabla_String(ResultSet rs, int columnas) throws SQLException {
-        ArrayList<String[]> lista = new ArrayList<>();
-        while (rs.next()) {
-            String[] elems = new String[columnas];
-            for (int j = 0; j < columnas; j++) {
-                elems[j] = rs.getString(j);
+    public static ArrayList<Object[]> Result_Objects(ResultSet rs, int columas) {
+        ArrayList<Object[]> lista = new ArrayList<>();
+        try {
+            while (rs.next()) {
+                String[] elems = new String[columas];
+                for (int i = 0; i < columas; i++) {
+                    elems[i] = rs.getString(i + 1);
+                }
+                lista.add(elems);
             }
-            lista.add(elems);
+            return lista;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
         return lista;
     }
 
-    public ArrayList<String[]> Tabla_String(ResultSet rs, String[] columnas) throws SQLException {
+    public static ArrayList<String[]> Result(ResultSet rs, int colms) {
         ArrayList<String[]> lista = new ArrayList<>();
-        String[] elems = new String[columnas.length];
-        int i;
-        while (rs.next()) {
-            i = 0;
-            for (String columna : columnas) {
-                elems[i] = rs.getString(columna);
-                i++;
+        try {
+            while (rs.next()) {
+                String[] elems = new String[colms];
+                for (int i = 0; i < colms; i++) {
+                    elems[i] = rs.getString(i + 1);
+                }
+                lista.add(elems);
             }
-            lista.add(elems.clone());
+            return lista;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
         return lista;
     }
 
-    public String[][] Tabla(ResultSet rs, int col) throws SQLException {
-        ArrayList<String[]> lista = Tabla_String(rs, col);
-        String matriz[][] = new String[lista.size()][col];
-        for (int i = 0; i < lista.size(); i++) {
-            matriz[i] = lista.get(i);
+    public static ArrayList<String[]> Result(ResultSet rs, String[] colms) {
+        ArrayList<String[]> lista = new ArrayList<>();
+        try {
+            int i;
+            while (rs.next()) {
+                String[] elems = new String[colms.length];
+                i = 0;
+                for (String col : colms) {
+                    elems[i] = rs.getString(col);
+                    i++;
+                }
+                lista.add(elems);
+            }
+            return lista;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
         }
-        return matriz;
+        return lista;
     }
 
-    public String[][] Tabla(ResultSet rs, String[] col) throws SQLException {
-        ArrayList<String[]> lista = Tabla_String(rs, col);
-        String matriz[][] = new String[lista.size()][col.length];
-        for (int i = 0; i < lista.size(); i++) {
-            matriz[i] = lista.get(i);
-            //System.out.println(i + ": " + Arrays.toString(matriz[i]));
-        }
-        return matriz;
-    }
-
-    public DefaultTableModel getModelo(ResultSet rs, String[] col) throws SQLException {
-        ArrayList<String[]> lista = Tabla_String(rs, col);
-        DefaultTableModel tb = new DefaultTableModel();
-        for (String string : col) {
-            tb.addColumn(string);
-        }
+    public static String[][] ResultArray(ResultSet rs, int col) {
+        ArrayList<String[]> lista = Result(rs, col);
+        String[][] matriz = new String[lista.size()][col];
+        int i = 0;
         for (String[] strings : lista) {
-            tb.addRow(strings);
+            matriz[i] = strings;
+            i++;
         }
-        return tb;
+        return matriz;
     }
 
+    public static String[][] ResultArray(ResultSet rs, String[] col) {
+        ArrayList<String[]> lista = Result(rs, col);
+        String[][] matriz = new String[lista.size()][col.length];
+        int i = 0;
+        for (String[] strings : lista) {
+            matriz[i] = strings;
+            i++;
+        }
+        return matriz;
+    }
 }

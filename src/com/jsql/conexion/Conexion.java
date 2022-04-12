@@ -1,11 +1,10 @@
 package com.jsql.conexion;
 
-import com.jsql.sentencias.Func;
 import com.jsql.sentencias.SQL;
+import com.jsql.sentencias.Func;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
-import java.util.logging.Logger;
 
 /**
  *
@@ -13,128 +12,91 @@ import java.util.logging.Logger;
  */
 public class Conexion extends BD {
 
-    private static final String LOCAL_URL = "jdbc:mysql://localhost/";
+    private static Conexion Instancia;
 
-    public static String getLOCAL_URL(String db) {
-        return LOCAL_URL + db;
-    }
-
-    public static String getLocal_Url(String port, String DB) {
-        return "jdbc:mysql://localhost:" + port + "/" + DB;
-    }
-
-    private static Conexion Nodo;
-
-    private static final Logger LOG = Logger.getLogger(Conexion.class.getName());
-
-    /**
-     * getNodo - Metodo encargado de instanciar la clase 
-     *
-     * @param user - usuario de la base de datoa.
-     * @param pass - contraseña de la base de datos.
-     * @param url - direccion de la base de datos.
-     * @return Nodo retorna una instancia de tipo conexion.
-     */
-    public static Conexion getNodo(String user, String pass, String url) {
-        if (Nodo == null) {
-            Nodo = new Conexion(user, pass, url);
+    public static Conexion getInstancia(String user, String pass, String url) {
+        if (Instancia == null) {
+            Instancia = new Conexion(user, pass, url);
         }
-        return Nodo;
+        return Instancia;
     }
 
-    public static Conexion getNodo() {
-        return Nodo;
+    public static Conexion getInstancia() {
+        return Instancia;
     }
+
+    public static String getLOCAL_URL(String port, String db) {
+        return "jdbc:mysql://localhost:" + port + "/" + db;
+    }
+
+    private final Pre_Querys query;
+    private final SQL sentecias;
     private Statement st;
-    private final SQL sent;
-    private Pre_Querys pq;
 
     protected Conexion(String user, String pass, String url) {
         super(user, pass, url);
-        sent = new SQL();
-
+        this.query = new Pre_Querys(cn);
+        sentecias = new SQL();
     }
 
-    @Override
-    public void conectar() {
-        super.conectar();
-        Pre_Querys();
+    public boolean insert(String tabla, String datos) throws SQLException {
+        st = cn.createStatement();
+        return st.execute(sentecias.INSERT(tabla, datos));
     }
 
-    private void Pre_Querys() {
-        pq = new Pre_Querys(getCn());
+    public boolean insert(String tabla, String campos, String datos) throws SQLException {
+        st = cn.createStatement();
+        return st.execute(sentecias.INSERT(tabla, campos, datos));
     }
 
-    public boolean add_Pre_Query(String Query) throws SQLException {
-        return pq.add_Pre_Query(Query);
+    public int update(String tabla, String campos_datos, String where) throws SQLException {
+        st = cn.createStatement();
+        return st.executeUpdate(sentecias.UPDATE(tabla, campos_datos, where));
     }
 
-    public void setString(int query, int p, String param) throws SQLException {
-        pq.setString(query, p, param);
+    public int update(String tabla, String campo, String dato, String where) throws SQLException {
+        st = cn.createStatement();
+        return st.executeUpdate(sentecias.UPDATE(tabla, campo, dato, where));
     }
 
-    public ResultSet executeQuery(int query) throws SQLException {
-        return pq.executeQuery(query);
+    public void delete(String tablas, String where) throws SQLException {
+        st = cn.createStatement();
+        st.execute(sentecias.DELETE(tablas, where));
     }
 
-    public ResultSet Execute_Pre_Query(int query) {
-        try {
-            return pq.executeQuery(query);
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
-        throw new NullPointerException("Query no listado");
+    public ResultSet select(String tabla) throws SQLException {
+        st = cn.createStatement();
+        return st.executeQuery(sentecias.SELECT(tabla));
     }
 
-    public String getCampos_Columas(String[] campos, String[] datos) {
+    public ResultSet select(String tabla, String campos) throws SQLException {
+        st = cn.createStatement();
+        return st.executeQuery(sentecias.SELECT(tabla, campos));
+    }
+
+    public ResultSet select(String tabla, String campos, String where) throws SQLException {
+        st = cn.createStatement();
+        return st.executeQuery(sentecias.SELECT(tabla, campos, where));
+    }
+
+    public String getDatos(String... datos) {
+        return Func.getDatos(datos);
+    }
+
+    public String getColumnas(String... datos) {
+        return Func.getColumas(datos);
+    }
+
+    public String getCampos_Datos(String[] campos, String[] datos) {
         return Func.getCampos_Datos(campos, datos);
     }
 
-    public String getColumnas(String... columnas) {
-        return Func.getColumas(columnas);
-    }
-
-    public String getDatos(String... Datos) {
-        return Func.getDatos(Datos);
-    }
-
-    public ResultSet select(String Tabla, String Campo, String Where) throws SQLException {
-        st = getCn().createStatement();
-        return st.executeQuery(sent.SELECT(Tabla, Campo, Where));
-    }
-
-    public ResultSet select(String Tabla, String Campo) throws SQLException {
-        st = getCn().createStatement();
-        return st.executeQuery(sent.SELECT(Tabla, Campo));
-    }
-
-    public void update(String Tabla, String data, String where) throws SQLException {
-        st = getCn().createStatement();
-        st.executeUpdate(sent.UPDATE(Tabla, data, where));
-    }
-
-    public void update(String Tabla, String campo, String dato, String where) throws SQLException {
-        st = getCn().createStatement();
-        st.executeUpdate(sent.UPDATE(Tabla, campo, dato, where));
-    }
-
-    public void DELETE(String Tabla, String where) throws SQLException {
-        st = getCn().createStatement();
-        st.executeUpdate(sent.DELETE(Tabla, where));
-    }
-
-    public void insert(String Tabla, String Campos, String Values) throws SQLException {
-        st = getCn().createStatement();
-        st.execute(sent.INSERT(Tabla, Campos, Values));
-    }
-
-    public void insert(String Tabla, String Values) throws SQLException {
-        st = getCn().createStatement();
-        st.execute(sent.INSERT(Tabla, Values, Values));
-    }
-
-    public SQL getSentencias() {
-        return sent;
+    public void close() {
+        try {
+            st.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
     }
 
 }

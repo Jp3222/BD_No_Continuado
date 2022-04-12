@@ -2,8 +2,6 @@ package com.jsql.database;
 
 import java.util.ArrayList;
 import com.jsql.conexion.Conexion;
-import java.lang.reflect.Array;
-import java.sql.SQLException;
 
 /**
  *
@@ -15,7 +13,6 @@ public class DB extends Conexion {
 
     public DB(String user, String pass, String url) {
         super(user, pass, url);
-        super.conectar();
     }
 
 }
