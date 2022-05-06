@@ -26,18 +26,26 @@ abstract class BD {
         this.user = user;
         this.pass = pass;
         this.url = url;
-    }
-
-    /**
-     */
-    public void conectar() {
         try {
             cn = DriverManager.getConnection(url, user, pass);
-            Conexion = true;
-            init();
+            this.Conexion = true;
+
         } catch (SQLException ex) {
-            Conexion = false;
             System.out.println(ex.getMessage());
+            this.Conexion = false;
+        }
+    }
+
+    protected BD(String url) {
+        this.user = null;
+        this.pass = null;
+        this.url = url;
+        try {
+            cn = DriverManager.getConnection(url);
+            this.Conexion = true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+            this.Conexion = false;
         }
     }
 

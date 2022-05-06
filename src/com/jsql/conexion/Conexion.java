@@ -1,16 +1,19 @@
 package com.jsql.conexion;
 
-import com.jsql.sentencias.SQL;
-import com.jsql.sentencias.Func;
+import com.jsql.Func;
+import com.jsql.FuncionesBasicas;
+import com.jsql.sql.SQL;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author HP
  */
-public class Conexion extends BD {
+public class Conexion extends BD implements FuncionesBasicas {
 
     private static Conexion Instancia;
 
@@ -29,74 +32,158 @@ public class Conexion extends BD {
         return "jdbc:mysql://localhost:" + port + "/" + db;
     }
 
-    private final Pre_Querys query;
-    private final SQL sentecias;
+    private final SQL sql;
+    private PreQuerys query;
     private Statement st;
 
     protected Conexion(String user, String pass, String url) {
         super(user, pass, url);
-        this.query = new Pre_Querys(cn);
-        sentecias = new SQL();
+        sql = new SQL();
     }
 
-    public boolean insert(String tabla, String datos) throws SQLException {
-        st = cn.createStatement();
-        return st.execute(sentecias.INSERT(tabla, datos));
+    public Conexion(String url) {
+        super(url);
+        sql = new SQL();
     }
 
-    public boolean insert(String tabla, String campos, String datos) throws SQLException {
-        st = cn.createStatement();
-        return st.execute(sentecias.INSERT(tabla, campos, datos));
+    @Override
+    public boolean INSERT(String tabla, String datos) {
+        try {
+            st = cn.createStatement();
+            st.executeUpdate(sql.INSERT(tabla, datos));
+            cerrarStament();
+            return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return false;
     }
 
-    public int update(String tabla, String campos_datos, String where) throws SQLException {
-        st = cn.createStatement();
-        return st.executeUpdate(sentecias.UPDATE(tabla, campos_datos, where));
+    @Override
+    public boolean INSERT(String tabla, String campos, String datos) {
+        try {
+            st = cn.createStatement();
+            st.executeUpdate(sql.INSERT(tabla, campos, datos));
+            cerrarStament();
+            return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return false;
     }
 
-    public int update(String tabla, String campo, String dato, String where) throws SQLException {
-        st = cn.createStatement();
-        return st.executeUpdate(sentecias.UPDATE(tabla, campo, dato, where));
+    @Override
+    public boolean INSERT(String tabla, String campos, String datos, String where) {
+        try {
+            st = cn.createStatement();
+            st.executeUpdate(sql.INSERT(tabla, campos, datos, where));
+            cerrarStament();
+            return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return false;
     }
 
-    public void delete(String tablas, String where) throws SQLException {
-        st = cn.createStatement();
-        st.execute(sentecias.DELETE(tablas, where));
+    @Override
+    public boolean UPDATE(String tabla, String campos_datos, String where) {
+        try {
+            st = cn.createStatement();
+            st.executeUpdate(sql.UPDATE(tabla, campos_datos, where));
+            cerrarStament();
+            return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return false;
     }
 
-    public ResultSet select(String tabla) throws SQLException {
-        st = cn.createStatement();
-        return st.executeQuery(sentecias.SELECT(tabla));
+    @Override
+    public boolean UPDATE(String tabla, String campos, String datos, String where) {
+        try {
+            st = cn.createStatement();
+            st.executeUpdate(sql.UPDATE(tabla, campos, datos, where));
+            cerrarStament();
+            return true;
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return false;
     }
 
-    public ResultSet select(String tabla, String campos) throws SQLException {
-        st = cn.createStatement();
-        return st.executeQuery(sentecias.SELECT(tabla, campos));
+    @Override
+    public boolean DELETE(String tablas, String where) {
+        try {
+            st = cn.createStatement();
+            st.execute(sql.DELETE(tablas, where));
+            cerrarStament();
+            return true;
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return false;
     }
 
-    public ResultSet select(String tabla, String campos, String where) throws SQLException {
-        st = cn.createStatement();
-        return st.executeQuery(sentecias.SELECT(tabla, campos, where));
+    @Override
+    public ResultSet SELECT(String tabla) {
+        try {
+            st = cn.createStatement();
+            return st.executeQuery(sql.SELECT(tabla));
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
-    public String getDatos(String... datos) {
-        return Func.getDatos(datos);
+    @Override
+    public ResultSet SELECT(String tabla, String campos) {
+        try {
+            st = cn.createStatement();
+            return st.executeQuery(sql.SELECT(tabla, campos));
+        } catch (SQLException ex) {
+            Logger.getLogger(Conexion.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return null;
     }
 
-    public String getColumnas(String... datos) {
-        return Func.getColumas(datos);
+    @Override
+    public ResultSet SELECT(String tabla, String campos, String where) {
+        try {
+            st = cn.createStatement();
+            return st.executeQuery(sql.SELECT(tabla, campos, where));
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
+
+    public void cerrarStament() {
+        try {
+            st.close();
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+    }
+
+    public String getCampos(String... campos) {
+        return Func.getCampos(campos);
+    }
+
+    public String getDatos(String... Datos) {
+        return Func.getDatos(Datos);
     }
 
     public String getCampos_Datos(String[] campos, String[] datos) {
         return Func.getCampos_Datos(campos, datos);
     }
 
-    public void close() {
-        try {
-            st.close();
-        } catch (SQLException ex) {
-            System.out.println(ex.getMessage());
-        }
+    public void setQuery(PreQuerys query) {
+        this.query = query;
+        this.query.setCn(cn);
+    }
+
+    public SQL getSql() {
+        return sql;
     }
 
 }
