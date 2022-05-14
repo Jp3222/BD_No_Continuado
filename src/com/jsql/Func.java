@@ -1,5 +1,7 @@
 package com.jsql;
 
+import java.util.Collection;
+
 /**
  *
  * @author jp
@@ -16,6 +18,23 @@ public class Func {
     }
 
     public static String getCampos(String... colums) {
+        String v = "";
+        for (String value : colums) {
+            v += value + ",";
+        }
+        return v.substring(0, v.length() - 1);
+    }
+
+    public static String getDatos(Collection<String> values) {
+        String v = "";
+        for (String value : values) {
+            v += "'" + value + "',";
+        }
+        return v.substring(0, v.length() - 1);
+
+    }
+
+    public static String getCampos(Collection<String> colums) {
         String v = "";
         for (String value : colums) {
             v += value + ",";
