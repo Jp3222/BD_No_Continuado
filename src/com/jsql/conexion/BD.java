@@ -10,17 +10,14 @@ import java.sql.SQLException;
  */
 abstract class BD {
 
-    /**
-     * user: pass: url:
-     */
     protected final String user, pass, url;
     protected Connection cn;
     protected boolean Conexion;
 
     /**
-     * @param user
-     * @param pass
-     * @param url
+     * @param user usuario de la base de datos
+     * @param pass contraseña del usuario
+     * @param url direccion de alojamiento de la base de datos
      */
     protected BD(String user, String pass, String url) {
         this.user = user;
@@ -29,13 +26,16 @@ abstract class BD {
         try {
             cn = DriverManager.getConnection(url, user, pass);
             this.Conexion = true;
-
         } catch (SQLException ex) {
             System.out.println(ex.getMessage());
             this.Conexion = false;
         }
     }
 
+    /**
+     *Constructo
+     * @param url
+     */
     protected BD(String url) {
         this.user = null;
         this.pass = null;
@@ -54,6 +54,8 @@ abstract class BD {
     }
 
     /**
+     * Metodo encargado de cerrar la conexion y cambiar el estado de "conectado"
+     * a "desconectado"
      */
     public void desconectar() {
         try {
@@ -65,12 +67,16 @@ abstract class BD {
     }
 
     /**
+     * @return "true" si la conexion es establecida y "false" si la conexion no
+     * se establecio
      */
     public boolean isConexion() {
         return Conexion;
     }
 
     /**
+     * @return un objeto de tipo Connection instanciado el cual se encarga de
+     * establecer la conexion a la base de datos
      */
     public Connection getCn() {
         return cn;

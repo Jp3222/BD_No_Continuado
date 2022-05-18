@@ -41,6 +41,15 @@ public class Contenedor {
         this.tabla = tabla;
     }
 
+    public Contenedor(String tabla, String where) {
+        this.campos = new ArrayList<>();
+        this.valores = new ArrayList<>();
+        this.tabla = tabla;
+        this.where = where;
+    }
+    
+    
+
     public void agregar(String columna, String valor) {
         this.campos.add(columna);
         this.valores.add(valor);

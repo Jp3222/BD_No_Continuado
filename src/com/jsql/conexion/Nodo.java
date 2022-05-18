@@ -15,30 +15,24 @@
  */
 package com.jsql.conexion;
 
+import java.util.ArrayList;
+import java.util.List;
+
 /**
  *
  * @author jp
+ * @param <K>
  */
-public class NewConexion extends Conexion {
+public class Nodo<K extends Comparable<K>> {
 
-    public NewConexion(String url) {
-        super(url);
+    private final List<String> valores;
+
+    public Nodo() {
+        this.valores = new ArrayList<>();
     }
 
-    public NewConexion(String user, String pass, String url) {
-        super(user, pass, url);
-    }
-
-    public boolean INSERT(Contenedor c) {
-        return super.insert(c.getTabla(), c.getColumnas(), c.getValores());
-    }
-
-    public boolean UPDATE(Contenedor c) {
-        return super.update(c.getTabla(), c.getCamposValores(), c.getWhere());
-    }
-
-    public boolean DELETE(Contenedor c) {
-        return super.delete(c.getTabla(), c.getWhere());
+    public String getDato(int indice) {
+        return valores.get(indice);
     }
 
 }

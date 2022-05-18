@@ -1,6 +1,7 @@
 package Prueba;
 
 import com.jsql.conexion.Conexion;
+import com.jsql.conexion.NewConexion;
 import java.sql.SQLException;
 
 public class Main {
@@ -16,8 +17,7 @@ public class Main {
     };
 
     public static void main(String[] args) throws SQLException {
-        Conexion cn = Conexion.getInstancia("jp", "12345", Conexion.getLOCAL_URL("3306", "jshop"));
+        NewConexion cn = new NewConexion("jp", "12345", Conexion.getLOCAL_URL_MYSQL(0,"3306", "jshop"));
         System.out.println(cn.isConexion());
-
     }
 }

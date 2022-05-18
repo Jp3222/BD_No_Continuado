@@ -10,7 +10,13 @@ import java.util.ArrayList;
  */
 public class Tablas {
 
-    public static ArrayList<Object[]> Result_Objects(ResultSet rs, int columas) {
+    /**
+     *
+     * @param rs
+     * @param columas
+     * @return
+     */
+    public static ArrayList<Object[]> getListaObjects(ResultSet rs, int columas) {
         ArrayList<Object[]> lista = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -27,7 +33,13 @@ public class Tablas {
         return lista;
     }
 
-    public static ArrayList<String[]> Result(ResultSet rs, int colms) {
+    /**
+     * 
+     * @param rs
+     * @param colms
+     * @return
+     */
+    public static ArrayList<String[]> getListaString(ResultSet rs, int colms) {
         ArrayList<String[]> lista = new ArrayList<>();
         try {
             while (rs.next()) {
@@ -43,8 +55,13 @@ public class Tablas {
         }
         return lista;
     }
-
-    public static ArrayList<String[]> Result(ResultSet rs, String[] colms) {
+    /**
+     * 
+     * @param rs
+     * @param colms
+     * @return 
+     */
+    public static ArrayList<String[]> getListaString(ResultSet rs, String[] colms) {
         ArrayList<String[]> lista = new ArrayList<>();
         try {
             int i;
@@ -63,9 +80,15 @@ public class Tablas {
         }
         return lista;
     }
-
-    public static String[][] ResultArray(ResultSet rs, int col) {
-        ArrayList<String[]> lista = Result(rs, col);
+    
+    /**
+     * 
+     * @param rs
+     * @param col
+     * @return 
+     */
+    public static String[][] getArregloString(ResultSet rs, int col) {
+        ArrayList<String[]> lista = getListaString(rs, col);
         String[][] matriz = new String[lista.size()][col];
         int i = 0;
         for (String[] strings : lista) {
@@ -75,8 +98,8 @@ public class Tablas {
         return matriz;
     }
 
-    public static String[][] ResultArray(ResultSet rs, String[] col) {
-        ArrayList<String[]> lista = Result(rs, col);
+    public static String[][] getArregloString(ResultSet rs, String[] col) {
+        ArrayList<String[]> lista = Tablas.getListaString(rs, col);
         String[][] matriz = new String[lista.size()][col.length];
         int i = 0;
         for (String[] strings : lista) {
@@ -85,4 +108,33 @@ public class Tablas {
         }
         return matriz;
     }
+    
+    /**
+     * 
+     * @param rs
+     * @param columas
+     * @return 
+     */
+    public static Object[][] getArrayObjects(ResultSet rs, int columas) {
+        ArrayList<Object[]> lista = getListaObjects(rs, columas);
+        try {
+            if (!lista.isEmpty()) {
+                Object[][] matriz = new Object[lista.size()][columas];
+                for (int i = 0; i < matriz.length; i++) {
+                    Object[] elems = new Object[columas];
+                    for (int j = 0; j < columas; j++) {
+                        elems[j] = rs.getObject(j + 1);
+                    }
+                    matriz[i] = elems;
+                }
+                lista = null;
+                return matriz;
+
+            }
+        } catch (SQLException ex) {
+            System.out.println(ex.getMessage());
+        }
+        return null;
+    }
+
 }

@@ -31,6 +31,11 @@ public class SQL extends Sentencias implements SentenciasBasicas {
         return "update " + tabla + " set " + campos + " = '" + datos + "' where " + where;
     }
 
+    
+    public String UPDATENUMBERS(String tabla, String campos, String datos, String where) {
+        return "update " + tabla + " set " + campos + " = " + datos + " where " + where;
+    }
+
     @Override
     public String DELETE(String tablas, String where) {
         return "delete from " + tablas + " where " + where;
